@@ -18,6 +18,7 @@ package com.example.android.todolist;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
@@ -27,7 +28,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
+
+import com.example.android.todolist.data.TaskContentProvider;
+import com.example.android.todolist.data.TaskContract;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -147,9 +152,17 @@ public class MainActivity extends AppCompatActivity implements
                 // Will implement to load data
 
                 // TODO (5) Query and load all task data in the background; sort by priority
+                Uri uri= TaskContract.TaskEntry.CONTENT_URI;
+                Cursor cursor=null;
+                try {
+                    cursor = getContentResolver().query(uri, null, null, null, TaskContract.TaskEntry.COLUMN_PRIORITY);
+                }catch (Exception e){
+                    Log.e("loadingBackground",e.toString());
+                    e.printStackTrace();
+                }
                 // [Hint] use a try/catch block to catch any errors in loading data
 
-                return null;
+                return cursor;
             }
 
             // deliverResult sends the result of the load, a Cursor, to the registered listener

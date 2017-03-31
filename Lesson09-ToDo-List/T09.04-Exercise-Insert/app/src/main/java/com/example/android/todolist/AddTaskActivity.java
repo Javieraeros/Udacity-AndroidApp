@@ -16,10 +16,18 @@
 
 package com.example.android.todolist;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.android.todolist.data.TaskContract;
 
 
 public class AddTaskActivity extends AppCompatActivity {
@@ -44,7 +52,17 @@ public class AddTaskActivity extends AppCompatActivity {
      */
     public void onClickAddTask(View view) {
         // Not yet implemented
+        String text=((EditText)findViewById(R.id.editTextTaskDescription)).getText().toString();
         // TODO (6) Check if EditText is empty, if not retrieve input and store it in a ContentValues object
+        if(!text.equals("")){
+            ContentValues mContenetvalues=new ContentValues();
+            mContenetvalues.put(TaskContract.TaskEntry.COLUMN_DESCRIPTION,text);
+            mContenetvalues.put(TaskContract.TaskEntry.COLUMN_PRIORITY,mPriority);
+            ContentResolver mContentResolver=getContentResolver();
+            Uri uri=mContentResolver.insert(TaskContract.TaskEntry.CONTENT_URI,mContenetvalues);
+            Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
         // TODO (7) Insert new task data via a ContentResolver
 
